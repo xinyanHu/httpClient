@@ -4,7 +4,7 @@
 
 AsyncCustomGetClient::AsyncCustomGetClient(io_context_type &io) : AsyncGetClient(io) {
 //    connect(this, &AsyncCustomGetClient::request_error, this, &AsyncCustomGetClient::handle_request_error);
-    connect(this, &AsyncCustomGetClient::response_error, this, &AsyncCustomGetClient::handle_response_error);
+//    connect(this, &AsyncCustomGetClient::response_error, this, &AsyncCustomGetClient::handle_response_error);
     connect(this, &AsyncCustomGetClient::finished, this, &AsyncCustomGetClient::handle_finished);
     connect(this, &AsyncCustomGetClient::download_progress, this, &AsyncCustomGetClient::hanle_download_progress);
     connect(this, &AsyncCustomGetClient::ready_read, this, &AsyncCustomGetClient::handle_ready_read);
@@ -17,7 +17,7 @@ void AsyncCustomGetClient::get(const string &server, const int port, const strin
     try {
         AsyncGetClient::get(server, port, path);
     } catch(std::exception& e) {
-        emit response_error(e.what());
+        emit error(-1, e.what());
     }
 }
 
@@ -25,7 +25,7 @@ void AsyncCustomGetClient::get(const string& server, const string& path) {
     try {
         AsyncGetClient::get(server, path);
     } catch(std::exception& e) {
-        emit response_error(e.what());
+        emit error(-1, e.what());
     }
 }
 
@@ -62,11 +62,13 @@ void AsyncCustomGetClient::handle_read_status_line(const error_code_type &err) {
         std::string status_message;
         std::getline(response_stream, status_message);
         if (!response_stream || http_version.substr(0, 5) != "HTTP/"){
-//            emit response_error("Invalid response");
+            emit error(-1, "Invalid response");
+            socket_.close();
             return;
         }
         if (status_code != 200){
             emit error(status_code, "Response returned with status code ");
+            socket_.close();
             return;
         }
 
@@ -120,6 +122,7 @@ void AsyncCustomGetClient::handle_read_content(const error_code_type& err) {
                                             boost::asio::placeholders::error));
     } else {
         if (err == boost::asio::error::eof) {
+            socket_.close();
             emit finished();
         } else  {
             emit error(err.value(), err.message());
@@ -129,16 +132,6 @@ void AsyncCustomGetClient::handle_read_content(const error_code_type& err) {
 }
 
 //--------------------------------------slot------------------------------------------
-void AsyncCustomGetClient::handle_request_error(const error_code_type& code) {
-    std::cerr << "------AsyncCustomGetClient::Request Error: " << code.message() << std::endl;
-//    emit finished();
-}
-
-void AsyncCustomGetClient::handle_response_error(const string& error) {
-    std::cerr << "------AsyncCustomGetClient::Response Error: " << error << std::endl;
-//    emit finished();
-}
-
 void AsyncCustomGetClient::handle_error(const int http_code, const std::string& message) {
     std::cerr << "error code: " << http_code << " message: " << message << std::endl;
 }

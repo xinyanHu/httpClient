@@ -14,8 +14,8 @@ public:
 
 signals:
     void finished();
-    void request_error(const error_code_type& code);
-    void response_error(const string& error);
+//    void request_error(const error_code_type& code);
+//    void response_error(const string& error);
     void download_progress(qint64 recived, qint64 total);
     void ready_read(streambuf_type& buffer);
 
@@ -43,8 +43,8 @@ public:
     void get(const string& server, const int port, const string& path) override;
 
     // error
-    void handle_request_error(const error_code_type& code);
-    void handle_response_error(const string& error);
+//    void handle_request_error(const error_code_type& code);
+//    void handle_response_error(const string& error);
 
     void handle_error(const int http_code, const std::string& message);
     // finiished
