@@ -13,7 +13,7 @@ public:
     AsyncCustomGetClient(io_context_type& io);
 
 signals:
-    void finished();
+    void finished(bool successed, const int httpCode, streambuf_type& buffer);
 //    void request_error(const error_code_type& code);
 //    void response_error(const string& error);
     void download_progress(qint64 recived, qint64 total);
@@ -43,14 +43,14 @@ public:
     void get(const string& server, const int port, const string& path) override;
 
     // error
-//    void handle_request_error(const error_code_type& code);
-//    void handle_response_error(const string& error);
-
     void handle_error(const int http_code, const std::string& message);
+
     // finiished
-    void handle_finished();
+    void handle_finished(bool successed, const int httpCode, streambuf_type& buffer);
+
     // download_porgress
     void hanle_download_progress(qint64 recived, qint64 total);
+
     // ready_read
     void handle_ready_read(streambuf_type& buffer);
 };
