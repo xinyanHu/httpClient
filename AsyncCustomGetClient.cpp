@@ -16,7 +16,7 @@ void AsyncCustomGetClient::get(const string &server, const int port, const strin
         AsyncGetClient::get(server, port, path);
     } catch(std::exception& e) {
         emit error(-1, e.what());
-        emit finished(false, -1, response_);
+        emit finished(false, err.value(), response_);
     }
 }
 
@@ -25,7 +25,7 @@ void AsyncCustomGetClient::get(const string& server, const string& path) {
         AsyncGetClient::get(server, path);
     } catch(std::exception& e) {
         emit error(-1, e.what());
-        emit finished(false, -1, response_);
+        emit finished(false, err.value(), response_);
     }
 }
 
@@ -33,7 +33,7 @@ void AsyncCustomGetClient::handle_resolve(const error_code_type& err,
                                           const results_type& endpoints) {
     if(err) {
          emit error(err.value(), err.message());
-         emit finished(false, -1, response_);
+         emit finished(false, err.value(), response_);
     }
     AsyncGetClient::handle_resolve(err, endpoints);
 }
@@ -41,7 +41,7 @@ void AsyncCustomGetClient::handle_resolve(const error_code_type& err,
 void AsyncCustomGetClient::handle_connect(const error_code_type& err) {
     if(err) {
          emit error(err.value(), err.message());
-         emit finished(false, -1, response_);
+         emit finished(false, err.value(), response_);
     }
     AsyncGetClient::handle_connect(err);
 }
@@ -49,7 +49,7 @@ void AsyncCustomGetClient::handle_connect(const error_code_type& err) {
 void AsyncCustomGetClient::handle_write_request(const error_code_type& err) {
     if(err) {
          emit error(err.value(), err.message());
-         emit finished(false, -1, response_);
+         emit finished(false, err.value(), response_);
     }
     AsyncGetClient::handle_write_request(err);
 }
