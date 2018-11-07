@@ -13,17 +13,12 @@ SyncGetClient::SyncGetClient(io_context_type& io_context) : resolver_(io_context
 SyncGetClient::SyncGetClient(): resolver_(context_), socket_(context_){}
 
 void SyncGetClient::get(const string &server, const string &path) {
-    boost::asio::steady_timer steady_timer(context, std::chrono::seconds(1));
-
-    resolver_.get_io_context().restart();
     std::ostream request_stream(&request_);
     request_stream << "GET " << path << " HTTP/1.0\r\n";
     request_stream << "Host: " << server << "\r\n";
     request_stream << "Accept: */*\r\n";
     request_stream << "Connection: close\r\n\r\n";
     handle_resolve(server);
-    // Run the operation until it completes, or until the timeout.
-     context.run();
 }
 
 void SyncGetClient::get(const string& server, const int port, const string& path) {
@@ -37,14 +32,16 @@ void SyncGetClient::get(const string& server, const int port, const string& path
 
 void SyncGetClient::handle_resolve(const string &server) {
     // Get a list of endpoints corresponding to the server name.
-    results_type endpoints = resolver_.resolve(server, "http");
+    results_type endpoints = resolver_.resolve(server, "http", err);
     handle_connect(endpoints);
 }
 
 void SyncGetClient::handle_resolve(const string &server, const int port) {
-    tcp::resolver::query query(server, std::to_string(port));
-    results_type type = resolver_.resolve(query);
-    handle_connect(type);
+//    tcp::resolver::query query(server, std::to_string(port));
+//    results_type type = resolver_.resolve(query);
+//    endpoint_type ep(boost::asio::ip::address::from_string(server), port);
+//    results_type type = resolver_.resolve(, boost::asio::placeholders::error);
+//    handle_connect(type);
 }
 
 void SyncGetClient::handle_connect(const results_type& endpoints) {

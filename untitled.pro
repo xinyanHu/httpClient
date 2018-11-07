@@ -29,14 +29,16 @@ SOURCES += \
     AsyncGetClient.cpp \
     SyncGetClient.cpp \
     AsyncCustomGetClient.cpp \
-    TestGet.cpp
+    TestGet.cpp \
+    SyncCustomGetClient.cpp
 
 HEADERS += \
         widget.h \
     AsyncGetClient.hpp \
     SyncGetClient.hpp \
     AsyncCustomGetClient.h \
-    TestGet.h
+    TestGet.h \
+    SyncCustomGetClient.h
 
 FORMS += \
         widget.ui

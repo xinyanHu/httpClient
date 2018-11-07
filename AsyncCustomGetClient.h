@@ -16,13 +16,10 @@ public:
 signals:
     void finished(bool successed, const int code, streambuf_type& buffer);
     void network_finished(bool successed, const int code, QByteArray content);
-
-//    void request_error(const error_code_type& code);
-//    void response_error(const string& error);
     void download_progress(qint64 recived, qint64 total);
     void ready_read(streambuf_type& buffer);
-
     void error(const int http_code, const std::string& message);
+
 protected:
     unsigned long long recived_ = 0;
     unsigned long long total_ = 0;

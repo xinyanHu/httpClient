@@ -31,14 +31,12 @@ protected:
     using steady_timer_type = boost::asio::steady_timer;
     using string = std::string;
     
-//    bool stopped_ = false;
     io_context_type context_;
     resolver_type resolver_;
     socket_type socket_;
     streambuf_type request_;
     streambuf_type response_;
-//    boost::asio::steady_timer steady_timer;
-    io_context_type context;
+    error_code_type err;
     
 public:
     SyncGetClient();
@@ -53,7 +51,7 @@ protected:
     // 连接
     virtual void handle_connect(const results_type& endpoints);
     // 写入 request
-    void handle_write_request();
+    virtual void handle_write_request();
     // 读取response状态
     virtual void handle_read_status_line();
     // 读取response header
