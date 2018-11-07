@@ -8,6 +8,7 @@ AsyncCustomGetClient::AsyncCustomGetClient(io_context_type &io) : AsyncGetClient
     connect(this, &AsyncCustomGetClient::ready_read, this, &AsyncCustomGetClient::handle_ready_read);
 
     connect(this, &AsyncCustomGetClient::error, this, &AsyncCustomGetClient::handle_error);
+    connect(this, &AsyncCustomGetClient::network_finished, this, &AsyncCustomGetClient::handle_network_finished);
 }
 
 //--------------------------------------override------------------------------------------
@@ -151,10 +152,15 @@ void AsyncCustomGetClient::handle_finished(bool successed, const int code, strea
         ss << &buffer;
         string s;
         ss >> s;
+        qDebug() << s.data();
         emit network_finished(successed, code, QByteArray(s.data()));
     } else {
         std::cerr  << "request finished with successed: " << successed << " http code:" << code << std::endl;
     }
+}
+
+void AsyncCustomGetClient::handle_network_finished(bool successed, const int code, QByteArray content) {
+
 }
 
 void AsyncCustomGetClient::hanle_download_progress(qint64 recived, qint64 total) {
@@ -162,9 +168,5 @@ void AsyncCustomGetClient::hanle_download_progress(qint64 recived, qint64 total)
 }
 
 void AsyncCustomGetClient::handle_ready_read(streambuf_type& buffer) {
-//    std::stringstream ss;
-//    ss << &buffer;
-//    string s;
-//    ss >> s;
-//    qDebug() << s.data();
+
 }
