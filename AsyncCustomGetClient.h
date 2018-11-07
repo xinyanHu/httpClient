@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtGlobal>
+#include <QByteArray>
 #include "AsyncGetClient.hpp"
 
 class AsyncCustomGetClient : public QObject, public AsyncGetClient
@@ -13,7 +14,9 @@ public:
     AsyncCustomGetClient(io_context_type& io);
 
 signals:
-    void finished(bool successed, const int httpCode, streambuf_type& buffer);
+    void finished(bool successed, const int code, streambuf_type& buffer);
+    void network_finished(bool successed, const int code, QByteArray content);
+
 //    void request_error(const error_code_type& code);
 //    void response_error(const string& error);
     void download_progress(qint64 recived, qint64 total);
@@ -46,7 +49,8 @@ public:
     void handle_error(const int http_code, const std::string& message);
 
     // finiished
-    void handle_finished(bool successed, const int httpCode, streambuf_type& buffer);
+    void handle_finished(bool successed, const int code, streambuf_type& buffer);
+    void handle_network_finished(bool successed, const int code, QByteArray content);
 
     // download_porgress
     void hanle_download_progress(qint64 recived, qint64 total);

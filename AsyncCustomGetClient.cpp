@@ -16,7 +16,7 @@ void AsyncCustomGetClient::get(const string &server, const int port, const strin
         AsyncGetClient::get(server, port, path);
     } catch(std::exception& e) {
         emit error(-1, e.what());
-        emit finished(false, err.value(), response_);
+        emit finished(false, -1, response_);
     }
 }
 
@@ -25,7 +25,7 @@ void AsyncCustomGetClient::get(const string& server, const string& path) {
         AsyncGetClient::get(server, path);
     } catch(std::exception& e) {
         emit error(-1, e.what());
-        emit finished(false, err.value(), response_);
+        emit finished(false, -1, response_);
     }
 }
 
@@ -132,7 +132,7 @@ void AsyncCustomGetClient::handle_read_content(const error_code_type& err) {
             emit finished(true, 200, response_);
         } else  {
             emit error(err.value(), err.message());
-            emit finished(true, 200, response_);
+            emit finished(false, 200, response_);
         }
     }
 
@@ -145,15 +145,15 @@ void AsyncCustomGetClient::handle_error(const int http_code, const std::string& 
     std::cerr << "error code: " << http_code << " message: " << message << std::endl;
 }
 
-void AsyncCustomGetClient::handle_finished(bool successed, const int httpCode, streambuf_type& buffer) {
-    if (successed && httpCode == 200) {
+void AsyncCustomGetClient::handle_finished(bool successed, const int code, streambuf_type& buffer) {
+    if (successed && code == 200) {
         std::stringstream ss;
         ss << &buffer;
         string s;
         ss >> s;
-        std::cerr << s << std::endl;
+        emit network_finished(successed, code, QByteArray(s.data()));
     } else {
-        std::cerr  << "request finished with successed: " << successed << " http code:" << httpCode << std::endl;
+        std::cerr  << "request finished with successed: " << successed << " http code:" << code << std::endl;
     }
 }
 
