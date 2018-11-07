@@ -41,22 +41,24 @@ protected:
     // 读取response content
     virtual void handle_read_content(const error_code_type& err) override;
 
+//    ---------------------slot-------------------------
+    // error
+//    void handle_error(const int http_code, const std::string& message);
+
+    // finiished
+    void handle_finished(bool successed, const int code, streambuf_type& buffer);
+//    void handle_network_finished(bool successed, const int code, QByteArray content);
+
+    // download_porgress
+//    void hanle_download_progress(qint64 recived, qint64 total);
+
+    // ready_read
+//    void handle_ready_read(streambuf_type& buffer);
+
 public:
     void get(const string& server, const string& path) override;
     void get(const string& server, const int port, const string& path) override;
 
-    // error
-    void handle_error(const int http_code, const std::string& message);
-
-    // finiished
-    void handle_finished(bool successed, const int code, streambuf_type& buffer);
-    void handle_network_finished(bool successed, const int code, QByteArray content);
-
-    // download_porgress
-    void hanle_download_progress(qint64 recived, qint64 total);
-
-    // ready_read
-    void handle_ready_read(streambuf_type& buffer);
 };
 
 #endif // ASYNCCUSTOMGETCLIENT_H

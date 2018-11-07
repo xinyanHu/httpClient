@@ -4,11 +4,10 @@
 
 AsyncCustomGetClient::AsyncCustomGetClient(io_context_type &io) : AsyncGetClient(io) {
     connect(this, &AsyncCustomGetClient::finished, this, &AsyncCustomGetClient::handle_finished);
-    connect(this, &AsyncCustomGetClient::download_progress, this, &AsyncCustomGetClient::hanle_download_progress);
-    connect(this, &AsyncCustomGetClient::ready_read, this, &AsyncCustomGetClient::handle_ready_read);
-
-    connect(this, &AsyncCustomGetClient::error, this, &AsyncCustomGetClient::handle_error);
-    connect(this, &AsyncCustomGetClient::network_finished, this, &AsyncCustomGetClient::handle_network_finished);
+//    connect(this, &AsyncCustomGetClient::download_progress, this, &AsyncCustomGetClient::hanle_download_progress);
+//    connect(this, &AsyncCustomGetClient::ready_read, this, &AsyncCustomGetClient::handle_ready_read);
+//    connect(this, &AsyncCustomGetClient::error, this, &AsyncCustomGetClient::handle_error);
+//    connect(this, &AsyncCustomGetClient::network_finished, this, &AsyncCustomGetClient::handle_network_finished);
 }
 
 //--------------------------------------override------------------------------------------
@@ -140,33 +139,29 @@ void AsyncCustomGetClient::handle_read_content(const error_code_type& err) {
 }
 
 //--------------------------------------slot------------------------------------------
-void AsyncCustomGetClient::handle_error(const int http_code, const std::string& message) {
-    // -1 exception
-    // -2 Invalid response
-    std::cerr << "error code: " << http_code << " message: " << message << std::endl;
-}
+//void AsyncCustomGetClient::handle_error(const int http_code, const std::string& message) {
+//    // -1 exception
+//    // -2 Invalid response
+//    std::cerr << "error code: " << http_code << " message: " << message << std::endl;
+//}
 
 void AsyncCustomGetClient::handle_finished(bool successed, const int code, streambuf_type& buffer) {
-    if (successed && code == 200) {
-        std::stringstream ss;
-        ss << &buffer;
-        string s;
-        ss >> s;
-        qDebug() << s.data();
-        emit network_finished(successed, code, QByteArray(s.data()));
-    } else {
-        std::cerr  << "request finished with successed: " << successed << " http code:" << code << std::endl;
-    }
+    std::stringstream ss;
+    ss << &buffer;
+    string s;
+    ss >> s;
+
+    emit network_finished(successed, code, QByteArray(s.data()));
 }
 
-void AsyncCustomGetClient::handle_network_finished(bool successed, const int code, QByteArray content) {
+//void AsyncCustomGetClient::handle_network_finished(bool successed, const int code, QByteArray content) {
 
-}
+//}
 
-void AsyncCustomGetClient::hanle_download_progress(qint64 recived, qint64 total) {
-    std::cerr << recived << " / " << total << std::endl;
-}
+//void AsyncCustomGetClient::hanle_download_progress(qint64 recived, qint64 total) {
+//    std::cerr << recived << " / " << total << std::endl;
+//}
 
-void AsyncCustomGetClient::handle_ready_read(streambuf_type& buffer) {
+//void AsyncCustomGetClient::handle_ready_read(streambuf_type& buffer) {
 
-}
+//}
