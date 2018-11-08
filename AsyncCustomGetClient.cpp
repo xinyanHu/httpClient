@@ -38,6 +38,15 @@ void AsyncCustomGetClient::post(const string& server, const int port, const stri
     }
 }
 
+void AsyncCustomGetClient::post(const string& server, const string& path, const string& content) {
+    try {
+        AsyncGetClient::post(server, path, content);
+    } catch(std::exception& e) {
+        emit error(-1, e.what());
+        emit finished(false, -1, response_);
+    }
+}
+
 void AsyncCustomGetClient::handle_resolve(const error_code_type& err,
                                           const results_type& endpoints) {
     if(err) {

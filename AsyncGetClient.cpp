@@ -47,6 +47,25 @@ void AsyncGetClient::get(const string &server, const int port, const string &pat
                                            boost::asio::placeholders::results));
 }
 
+void AsyncGetClient::post(const string& server, const string& path, const string& content) {
+    std::ostream request_stream(&request_);
+    request_stream << "POST " << path << " HTTP/1.0\r\n";
+    request_stream << "Host: " << server << "\r\n";
+    request_stream << "Accept: */*\r\n";
+    request_stream << "Content-Type: application/json\r\n";
+    request_stream << "Charset: UTF-8\r\n";
+    request_stream << "Connection: close\r\n";
+    request_stream << "Content-Length: " << content.size() << "\r\n\r\n";
+    request_stream << content;
+
+    // Start an asynchronous resolve to translate the server and service names
+    // into a list of endpoints.
+    resolver_.async_resolve(server, "http",
+                            boost::bind(&AsyncGetClient::handle_resolve, this,
+                                        boost::asio::placeholders::error,
+                                        boost::asio::placeholders::results));
+}
+
 void AsyncGetClient::post(const string& server, const int port, const string& path, const string &content) {
     std::ostream request_stream(&request_);
     request_stream << "POST " << path << " HTTP/1.0\r\n";
