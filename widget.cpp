@@ -36,7 +36,7 @@ void Widget::on_btn_sync_clicked()
         //                                               "/qtproject/archive/qt/5.8/5.8.0/qt-opensource-mac-x64-clang-5.8.0.dmg");
         boost::asio::io_context::work work(io);
         SyncGetClient client(io);
-        client.get("192.168.1.134", 1340, "/core/client/gettoken");
+        client.get("127.0.0.1", 8080, "/");
     } catch(std::exception& e) {
         std::cerr << e.what() << std::endl;
     }

@@ -49,15 +49,15 @@ protected:
     virtual void handle_resolve(const string &server);
     virtual void handle_resolve(const string &server, const int port);
     // 连接
-    virtual void handle_connect(const results_type& endpoints);
+    virtual void handle_connect(const results_type& endpoints, error_code_type& err);
     // 写入 request
-    virtual void handle_write_request();
+    virtual void handle_write_request(error_code_type& err);
     // 读取response状态
-    virtual void handle_read_status_line();
+    virtual void handle_read_status_line(error_code_type& err);
     // 读取response header
-    virtual void handle_read_headers(std::istream& response_stream);
+    virtual void handle_read_headers(std::istream& response_stream, error_code_type& err);
     // 读取response content
-    virtual void handle_read_content();
+    virtual void handle_read_content(error_code_type& err);
 };
 
 #endif /* SyncGetClient_hpp */

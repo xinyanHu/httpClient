@@ -58,6 +58,7 @@ public:
     virtual void get(const string& server, const int port, const string& path);
 
     virtual void post(const string& server, const int port, const string& path, const string& content);
+    virtual void post(const string& server, const string& path, const string& content);
 };
 
 #endif /* AsyncGetClient_hpp */
