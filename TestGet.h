@@ -19,7 +19,7 @@ protected:
 //    void hanle_download_progress(qint64 recived, qint64 total);
 
     // ready_read
-//    void handle_ready_read(streambuf_type& buffer);
+    void handle_ready_read(streambuf_type& buffer);
 
 private:
     // init connect

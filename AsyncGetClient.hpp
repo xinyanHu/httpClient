@@ -56,6 +56,8 @@ public:
     virtual void get(const string& server, const string& path);
     // 127.0.0.1  8089 /SDXNY/tdfdscyb/getAllDq\?dq=1
     virtual void get(const string& server, const int port, const string& path);
+
+    virtual void post(const string& server, const int port, const string& path, const string& content);
 };
 
 #endif /* AsyncGetClient_hpp */

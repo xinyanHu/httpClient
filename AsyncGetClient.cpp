@@ -36,11 +36,28 @@ void AsyncGetClient::get(const string &server, const int port, const string &pat
     // allow us to treat all data up until the EOF as the content.
     std::ostream request_stream(&request_);
     request_stream << "GET " << path << " HTTP/1.0\r\n";
-    request_stream << "Host: " << server + ":" + std::to_string(port) << "\r\n";
+    request_stream << "Host: " << server << ":" << port << "\r\n";
     request_stream << "Accept: */*\r\n";
     request_stream << "Connection: close\r\n\r\n";
 
     // create endpoint
+    endpoint_type ep(boost::asio::ip::address::from_string(server), port);
+    resolver_.async_resolve(ep,boost::bind(&AsyncGetClient::handle_resolve, this,
+                                           boost::asio::placeholders::error,
+                                           boost::asio::placeholders::results));
+}
+
+void AsyncGetClient::post(const string& server, const int port, const string& path, const string &content) {
+    std::ostream request_stream(&request_);
+    request_stream << "POST " << path << " HTTP/1.0\r\n";
+    request_stream << "Host: " << server + ":" << port << "\r\n";
+    request_stream << "Accept: */*\r\n";
+    request_stream << "Content-Type: application/json\r\n";
+    request_stream << "Charset: UTF-8\r\n";
+    request_stream << "Connection: close\r\n";
+    request_stream << "Content-Length: " << content.size() << "\r\n\r\n";
+    request_stream << content;
+
     endpoint_type ep(boost::asio::ip::address::from_string(server), port);
     resolver_.async_resolve(ep,boost::bind(&AsyncGetClient::handle_resolve, this,
                                            boost::asio::placeholders::error,

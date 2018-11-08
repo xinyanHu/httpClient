@@ -20,16 +20,11 @@ Widget::~Widget()
 
 void Widget::on_btn_async_clicked()
 {
-    try {
-        boost::asio::io_context io;
-        TestGet client1(io);
-//        client1.get("iso.mirrors.ustc.edu.cn", "/qtproject/archive/qt/5.8/5.8.0/qt-opensource-mac-x64-clang-5.8.0.dmg");
-        client1.get("127.0.0.1", 7000, "/platform/visualization/getTree");
-//        client1.get("127.0.0.1", 7000, "/platform/visualization/getStationInfo?stationName=%E5%9B%BD%E4%BF%A1%E4%B8%B4%E6%B5%B7%E9%A3%8E%E7%94%B5&time=2018-11-07");
-        io.run();
-    } catch(std::exception& e) {
-        std::cerr << "------" << e.what() << std::endl;
-    }
+    boost::asio::io_context io;
+    TestGet client(io);
+    std::string s = "{\"mac\" : \"00:1C:42:5D:8A:1D\", \"password\" : \"1\", \"username\" : \"李一\", \"version\" : \"\" }";
+    client.post("192.168.1.134", 1340, "/core/client/gettoken", s);
+    io.run();
 }
 
 void Widget::on_btn_sync_clicked()
@@ -41,7 +36,7 @@ void Widget::on_btn_sync_clicked()
         //                                               "/qtproject/archive/qt/5.8/5.8.0/qt-opensource-mac-x64-clang-5.8.0.dmg");
         boost::asio::io_context::work work(io);
         SyncGetClient client(io);
-        client.get("   ", 7000, "/platform/visualization/getTree");
+        client.get("192.168.1.134", 1340, "/core/client/gettoken");
     } catch(std::exception& e) {
         std::cerr << e.what() << std::endl;
     }

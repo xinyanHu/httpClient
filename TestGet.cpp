@@ -6,7 +6,7 @@ TestGet::TestGet(io_context_type &io) : AsyncCustomGetClient(io) {
 
 void TestGet::init() {
 //    connect(this, &AsyncCustomGetClient::download_progress, this, &TestGet::hanle_download_progress);
-//    connect(this, &AsyncCustomGetClient::ready_read, this, &TestGet::handle_ready_read);
+    connect(this, &AsyncCustomGetClient::ready_read, this, &TestGet::handle_ready_read);
     connect(this, &AsyncCustomGetClient::error, this, &TestGet::handle_error);
     connect(this, &AsyncCustomGetClient::network_finished, this, &TestGet::handle_network_finished);
 }
@@ -31,6 +31,6 @@ void TestGet::handle_network_finished(bool successed, const int code, QByteArray
 //}
 
 // ready_read
-//void TestGet::handle_ready_read(streambuf_type& buffer) {
-
-//}
+void TestGet::handle_ready_read(streambuf_type& buffer) {
+//    std::cerr << &buffer;
+}

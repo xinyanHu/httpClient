@@ -29,6 +29,15 @@ void AsyncCustomGetClient::get(const string& server, const string& path) {
     }
 }
 
+void AsyncCustomGetClient::post(const string& server, const int port, const string& path, const string& content) {
+    try {
+        AsyncGetClient::post(server, port, path, content);
+    } catch(std::exception& e) {
+        emit error(-1, e.what());
+        emit finished(false, -1, response_);
+    }
+}
+
 void AsyncCustomGetClient::handle_resolve(const error_code_type& err,
                                           const results_type& endpoints) {
     if(err) {
@@ -148,8 +157,7 @@ void AsyncCustomGetClient::handle_read_content(const error_code_type& err) {
 void AsyncCustomGetClient::handle_finished(bool successed, const int code, streambuf_type& buffer) {
     std::stringstream ss;
     ss << &buffer;
-    string s;
-    ss >> s;
+    string s(ss.str());
 
     emit network_finished(successed, code, QByteArray(s.data()));
 }

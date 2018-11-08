@@ -55,7 +55,7 @@ protected:
 public:
     void get(const string& server, const string& path) override;
     void get(const string& server, const int port, const string& path) override;
-
+    void post(const string& server, const int port, const string& path, const string& content) override;
 };
 
 #endif // ASYNCCUSTOMGETCLIENT_H
