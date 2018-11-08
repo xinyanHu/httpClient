@@ -23,15 +23,15 @@ protected:
     virtual void handle_resolve(const string &server) override;
     virtual void handle_resolve(const string &server, const int port) override;
     // 连接
-    virtual void handle_connect(const results_type& endpoints) override;
+    virtual void handle_connect(const results_type& endpoints, error_code_type& err) override;
     // 写入 request
-    virtual void handle_write_request() override;
+    virtual void handle_write_request(error_code_type& err) override;
     // 读取response状态
-    virtual void handle_read_status_line() override;
+    virtual void handle_read_status_line(error_code_type& err) override;
     // 读取response header
-    virtual void handle_read_headers(std::istream& response_stream) override;
+    virtual void handle_read_headers(std::istream& response_stream, error_code_type& err) override;
     // 读取response content
-    virtual void handle_read_content() override;
+    virtual void handle_read_content(error_code_type& err) override;
 };
 
 #endif // SYNCCUSTOMGETCLIENT_H
